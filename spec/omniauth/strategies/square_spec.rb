@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe OmniAuth::Strategies::Square do
   before :each do
-    @request = double('Request', :scheme => '', :url => '')
+    @request = double('Request', scheme: '', url: '')
     @request.stub(:params) { {} }
   end
 
@@ -29,14 +31,14 @@ describe OmniAuth::Strategies::Square do
   describe '#info' do
     before :each do
       @raw_info = {
-        "merchant" => [{
-          "id" => "JGHJ0343",
-          "business_name" => "Foobar Sports",
-          "country" => "US",
-          "language_code" => "en-US",
-          "currency" => "USD",
-          "status" => "ACTIVE",
-          "main_location_id" => "DDM555V5KQPNS"
+        'merchant' => [{
+          'id' => 'JGHJ0343',
+          'business_name' => 'Foobar Sports',
+          'country' => 'US',
+          'language_code' => 'en-US',
+          'currency' => 'USD',
+          'status' => 'ACTIVE',
+          'main_location_id' => 'DDM555V5KQPNS'
         }]
       }
 
@@ -49,7 +51,7 @@ describe OmniAuth::Strategies::Square do
       end
 
       it 'returns raw info' do
-        subject.extra[:raw_info]['merchant'][0]['business_name'].should eq("Foobar Sports")
+        subject.extra[:raw_info]['merchant'][0]['business_name'].should eq('Foobar Sports')
       end
     end
   end
