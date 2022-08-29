@@ -7,10 +7,9 @@ module OmniAuth
     class Square < OmniAuth::Strategies::OAuth2
       option :name, 'square'
       option :client_options, {
-        site: 'https://squareup.com/',
-        connect_site: 'https://connect.squareup.com',
-        authorize_url: '/oauth2/authorize',
-        token_url: '/oauth2/token'
+        site: 'https://connect.squareup.com',
+        authorize_url: 'oauth2/authorize',
+        token_url: 'oauth2/token'
       }
 
       uid { raw_info['merchant'][0]['id'] }
@@ -18,7 +17,8 @@ module OmniAuth
       info do
         prune!(
           name: raw_info['merchant'][0]['business_name'],
-          country: raw_info['merchant'][0]['country']
+          country: raw_info['merchant'][0]['country'],
+          email: raw_info['email']
         )
       end
 
@@ -26,28 +26,22 @@ module OmniAuth
         { raw_info: raw_info }
       end
 
-      def build_access_token
-        connect_client = client.dup
-        connect_client.site = options.client_options.connect_site
-        auth_params = {
-          redirect_uri: callback_url,
-          client_id: options.client_id,
-          client_secret: options.client_secret,
-          grant_type: 'authorization_code'
-        }.merge(token_params.to_hash(symbolize_keys: true))
-        connect_client.auth_code.get_token(
-          request.params['code'],
-          auth_params.merge(
-            token_params.to_hash(symbolize_keys: true)
-          ),
-          deep_symbolize(options.auth_token_params)
-        )
+      def callback_url
+        full_host + script_name + callback_path
       end
 
-      private
+      def build_access_token
+        options.token_params.merge!({client_id: options.client_id, client_secret: options.client_secret})
+        super
+      end
+
+  private
 
       def raw_info
         @raw_info ||= access_token.get('/v2/merchants').parsed
+        main_location_id = @raw_info['merchant'][0]['main_location_id']
+        location_data = access_token.get("/v2/locations/#{main_location_id}").parsed
+        @raw_info.merge!({email: location_data['location']['business_email']})
       end
 
       def prune!(hash)
