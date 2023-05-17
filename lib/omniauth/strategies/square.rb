@@ -42,6 +42,7 @@ module OmniAuth
 
         # Get merchant email
         team_members = access_token.post("/v2/team-members/search", {query: {filter: {is_owner: true}}})
+        log :debug, team_members
         @raw_info.merge!({email: team_members[0].email})
       end
 
