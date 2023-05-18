@@ -16,15 +16,15 @@ describe OmniAuth::Strategies::Square do
 
   describe '#client' do
     it 'has correct Square site' do
-      subject.client.site.should eq('https://squareup.com/')
+      subject.client.site.should eq('https://connect.squareup.com/')
     end
 
     it 'has correct authorize url' do
-      subject.client.options[:authorize_url].should eq('/oauth2/authorize')
+      subject.client.options[:authorize_url].should eq('oauth2/authorize')
     end
 
     it 'has correct token url' do
-      subject.client.options[:token_url].should eq('/oauth2/token')
+      subject.client.options[:token_url].should eq('oauth2/token')
     end
   end
 
