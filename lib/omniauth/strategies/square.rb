@@ -43,7 +43,7 @@ module OmniAuth
         # Get merchant email
         log :info, "Getting merchant email"
         resp = access_token.post("/v2/team-members/search", {query: {filter: {is_owner: true}}}).parsed
-        log :info, "Got merchant email: #{resp[:team_members][0].email_address}"
+        log :info, "Got merchant email: #{resp[:team_members][0]}"
         @raw_info.merge!({email: resp[:team_members][0].email_address})
       end
 
