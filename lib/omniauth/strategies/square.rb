@@ -41,9 +41,10 @@ module OmniAuth
         @raw_info ||= access_token.get('/v2/merchants').parsed
 
         # Get merchant email
-        team_members = access_token.post("/v2/team-members/search", {query: {filter: {is_owner: true}}})
-        log :debug, team_members
-        @raw_info.merge!({email: team_members[0].email})
+        log :info, "Getting merchant email"
+        resp = access_token.post("/v2/team-members/search", {query: {filter: {is_owner: true}}}).parsed
+        log :info, "Got merchant email: #{resp[:team_members][0].email_address}"
+        @raw_info.merge!({email: resp[:team_members][0].email_address})
       end
 
       def prune!(hash)
