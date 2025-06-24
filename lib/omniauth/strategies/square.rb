@@ -30,6 +30,12 @@ module OmniAuth
         full_host + script_name + callback_path
       end
 
+      def authorize_params
+        super.tap do |params|
+          params[:session] = options[:session] if options[:session] == false
+        end
+      end
+
       def build_access_token
         options.token_params.merge!({client_id: options.client_id, client_secret: options.client_secret})
         super

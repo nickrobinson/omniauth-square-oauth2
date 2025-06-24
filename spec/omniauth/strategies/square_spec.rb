@@ -106,4 +106,32 @@ describe OmniAuth::Strategies::Square do
       subject.credentials.should_not have_key('refresh_token')
     end
   end
+
+  describe '#authorize_params' do
+    context 'when session is set to false' do
+      before do
+        @options = { session: false }
+      end
+
+      it 'includes session=false in authorize params' do
+        subject.authorize_params[:session].should eq(false)
+      end
+    end
+
+    context 'when session is not set' do
+      it 'does not include session in authorize params' do
+        subject.authorize_params.should_not have_key(:session)
+      end
+    end
+
+    context 'when session is set to true' do
+      before do
+        @options = { session: true }
+      end
+
+      it 'does not include session in authorize params' do
+        subject.authorize_params.should_not have_key(:session)
+      end
+    end
+  end
 end

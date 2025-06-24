@@ -8,7 +8,7 @@ Square uses the OAuth2 flow, you can read about it here: http://connect.squareup
 
 So let's say you're using Rails, you need to add the strategy to your `Gemfile`:
 
-    gem 'omniauth-square-oauth2', '~> 0.2.1'
+    gem 'omniauth-square-oauth2', '~> 0.2.2'
 
 You can pull it in directly from github (if you really want to) e.g.:
 
@@ -21,6 +21,14 @@ Once these are in, you need to add the following to your `config/initializers/de
 Sandbox Example:
 
      config.omniauth :square, "your_app_id", "your_app_oauth_secret", {:scope => "ITEMS_READ,ITEMS_WRITE,MERCHANT_PROFILE_READ", :client_options => {:site => 'https://connect.squareupsandbox.com'}}
+
+## Configuration Options
+
+### Session Parameter
+
+To prevent repeated authorization prompts for already-authorized applications, you can set `session: false`:
+
+    config.omniauth :square, "your_app_id", "your_app_oauth_secret", {:scope => "ITEMS_READ,ITEMS_WRITE,MERCHANT_PROFILE_READ", :session => false}
 
 You will obviously have to put in your key and secret, which you get when you register your app with Square (they call them Application Key and Secret Key).
 
